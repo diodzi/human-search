@@ -4,8 +4,19 @@ export default function About() {
   const [query, setQuery] = useState('[actual question] reddit')
 
   return (
-    <main className='h-[100dvh] grid place-items-center selection:bg-indigo-800 selection:text-white'>
-      <div className='space-y-12'>
+    <main className='w-full h-[100dvh] grid place-items-center selection:bg-indigo-800 selection:text-white'>
+      {/* mobile */}
+      <div>
+        <div className='space-y-4'>
+          <h1 className='text-2xl font-semibold'>HumanSearch</h1>
+          <p>
+            Currently unsupported on mobile :( <br /> Try viewing this page on
+            your laptop/desktop!
+          </p>
+        </div>
+      </div>
+      {/* desktop */}
+      <div className='hidden lg:block p-8 space-y-8 lg:space-y-12'>
         <h1 className='text-4xl font-semibold'>HumanSearch</h1>
         <section className='space-y-4'>
           <h2 className='text-2xl font-semibold'>Why?</h2>
@@ -72,7 +83,7 @@ export default function About() {
             <li>
               <div className='flex flex-col gap-y-2'>
                 <span className='font-medium'>Copy this:</span>
-                <div className='p-2 border-[1px] w-[500px] rounded-md flex items-center justify-between'>
+                <div className='p-2 border-[1px] md:w-[500px] rounded-md flex items-center justify-between'>
                   <input
                     type='text'
                     readOnly
