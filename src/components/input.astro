@@ -1,0 +1,52 @@
+---
+const { label, text } = Astro.props;
+import CopyIcon from "@lucide/astro/icons/copy";
+import CheckIcon from "@lucide/astro/icons/check";
+---
+
+<div class="copy-container flex flex-col gap-y-1" data-text={text}>
+    <span class="text-xs">{label}</span>
+    <div
+        class="pl-2 pr-2 py-1 border border-zinc-300 rounded-xl w-80 flex justify-between items-center"
+    >
+        <span class="text-sm">{text}</span>
+        <div
+            class="copy-btn bg-zinc-950 text-white p-1 rounded-md hover:cursor-pointer hover:bg-zinc-700"
+        >
+            <CopyIcon size={15} />
+            <CheckIcon size={15} class="hidden-manual" />
+        </div>
+    </div>
+</div>
+
+<style>
+    .hidden-manual {
+        display: none;
+    }
+</style>
+
+<script>
+    const containers = document.querySelectorAll(".copy-container");
+
+    containers.forEach((container) => {
+        const btn = container.querySelector(".copy-btn");
+        const textToCopy = container.getAttribute("data-text");
+
+        btn?.addEventListener("click", async () => {
+            try {
+                if (textToCopy) {
+                    await navigator.clipboard.writeText(textToCopy);
+
+                    // Optional: Simple feedback (visual "pop" or tooltip)
+                    btn.classList.add("bg-green-600");
+                    setTimeout(
+                        () => btn.classList.remove("bg-green-600"),
+                        1000,
+                    );
+                }
+            } catch (err) {
+                console.error("Failed to copy: ", err);
+            }
+        });
+    });
+</script>
