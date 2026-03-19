@@ -4,11 +4,14 @@ import { defineConfig, fontProviders } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import AstroPWA from '@vite-pwa/astro'
 
+import cloudflare from '@astrojs/cloudflare'
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
   fonts: [
     {
       name: 'Lora',
@@ -21,28 +24,32 @@ export default defineConfig({
     AstroPWA({
       strategies: 'injectManifest',
       srcDir: 'src',
-      filename: 'sw.ts', // This is where your logic will live
+      outDir: 'dist/client',
+      filename: 'sw.ts',
       injectManifest: {
-        // Use injectManifest instead of workbox
         globIgnores: [
           '**/node_modules/**/*',
           '**/astro/**/*',
           '**/astro:server-app',
         ],
+        globDirectory: 'dist/client',
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
       },
       registerType: 'autoUpdate',
-      injectRegister: 'inline', // Automatically adds the registration script to your HTML
+      injectRegister: 'inline',
       manifest: {
         name: 'HumanSearch',
         short_name: 'HumanSearch',
         theme_color: '#000000',
-        icons: [], // Add your icons here later
+        icons: [],
       },
       devOptions: {
-        enabled: true, // Allows you to test the redirector in dev mode
+        enabled: true,
         type: 'module',
         navigateFallbackAllowlist: [/^\/$/],
       },
     }),
   ],
+
+  adapter: cloudflare(),
 })
