@@ -1,0 +1,13 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>HumanSearch</ShortName>
+  <Description>Search built for humans in an AI world.</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Url
+        type="text/html"
+        template="https://humansearch.diodzi.dev/?q={searchTerms}"
+    />
+  <Url
+        type="application/x-suggestions+json"
+        template="https://humansearch.diodzi.dev/api/suggest?q={searchTerms}"
+    />
+</OpenSearchDescription>
