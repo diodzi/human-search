@@ -31,7 +31,7 @@ export function resolveBang(inputUrl: string): string | null {
     const trigger = (match[2] || match[4]).toLowerCase()
     const baseUrl = BANGS[trigger]
 
-    const searchTerm = query.replace(trigger, '').trim()
+    const searchTerm = query.replace(new RegExp(trigger, 'i'), '').trim()
 
     if (!searchTerm) return new URL(baseUrl).origin
 
