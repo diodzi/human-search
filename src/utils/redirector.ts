@@ -13,26 +13,22 @@ export function resolveBang(inputUrl: string): string | null {
   if (!rawQuery) return null
 
   let query = rawQuery.trim()
-
   const keys = Object.keys(BANGS)
 
-  const words = keys
-    .filter((k) => /^[!a-zA-Z0-9]+$/.test(k))
-    .map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-
-  const symbols = keys
-    .filter((k) => !/^[!a-zA-Z0-9]+$/.test(k))
-    .map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const sortedKeys = keys.sort((a, b) => b.length - a.length)
+  const escapedKeys = sortedKeys.map((k) =>
+    k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+  )
 
   const pattern = new RegExp(
-    `(?:^|\\s)(${words.join('|')})(?:\\s|$)|(${symbols.join('|')})$`,
+    `(^(${escapedKeys.join('|')})\\s+)|(\\s*(${escapedKeys.join('|')})$)`,
     'i',
   )
 
   const match = query.match(pattern)
 
   if (match) {
-    const trigger = (match[1] || match[2]).toLowerCase()
+    const trigger = (match[2] || match[4]).toLowerCase()
     const baseUrl = BANGS[trigger]
 
     const searchTerm = query.replace(trigger, '').trim()
