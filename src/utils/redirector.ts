@@ -2,7 +2,7 @@ type BangMap = Record<string, string>
 
 const BANGS: BangMap = {
   '?': 'https://www.google.com/search?q=reddit%20',
-  '!g': 'https://www.google.com/search?q=',
+  '!g': 'https://www.genius.com/search?q=',
 }
 
 export function resolveBang(inputUrl: string): string | null {
