@@ -4,7 +4,7 @@
   <InputEncoding>UTF-8</InputEncoding>
   <Url
         type="text/html"
-        template="https://humansearch.diodzi.dev/?q={searchTerms}"
+        template="https://humansearch.diodzi.dev/?search={searchTerms}"
     />
   <Url
         type="application/x-suggestions+json"
