@@ -3,6 +3,7 @@ type BangMap = Record<string, string>
 const BANGS: BangMap = {
   '?': 'https://www.google.com/search?q=reddit%20',
   '!g': 'https://www.genius.com/search?q=',
+  '!google': 'https://www.google.com/search?q=',
 }
 
 export function resolveBang(inputUrl: string): string | null {
@@ -41,5 +42,5 @@ export function resolveBang(inputUrl: string): string | null {
     return baseUrl + encodeURIComponent(searchTerm)
   }
 
-  return BANGS['!g'] + encodeURIComponent(query)
+  return BANGS['!google'] + encodeURIComponent(query)
 }
