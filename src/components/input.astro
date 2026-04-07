@@ -7,11 +7,11 @@ import CheckIcon from '@lucide/astro/icons/check'
 <div class='copy-container flex flex-col gap-y-1' data-text={text}>
     <span class='text-xs'>{label}</span>
     <div
-        class='pl-2 pr-2 py-1 border border-zinc-300 rounded-xl w-100 flex justify-between items-center'
+        class='pl-4 pr-2 py-2 border border-zinc-300 rounded-xl w-100 flex justify-between items-center'
     >
         <span class='text-sm'>{text}</span>
         <div
-            class='copy-btn bg-zinc-950 text-white p-1 rounded-md hover:cursor-pointer hover:bg-zinc-700'
+            class='copy-btn bg-linear-to-b from-zinc-950 to-zinc-700 text-white p-2 rounded-md cursor-default border-b-4 border-black shadow-lg active:border-b-0 active:translate-y-1 active:shadow-none duration-100 transition-all'
         >
             <CopyIcon size={15} />
             <CheckIcon size={15} class='hidden-manual' />

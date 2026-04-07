@@ -27,15 +27,25 @@ import '../styles/global.css'
             <slot />
         </main>
         <footer
-            class='absolute bottom-0 py-4 w-full flex justify-center gap-x-4 text-zinc-400'
+            class='absolute bottom-0 pb-6 w-full flex justify-center items-center gap-x-4 text-zinc-400'
         >
-            <a href='/privacy-policy'>privacy policy</a>
+            <a
+                href='/privacy-policy'
+                class='text-sm gap-x-2 px-2 py-1 bg-linear-to-b from-zinc-50 to-zinc-200 text-zinc-800 rounded-lg cursor-default border-b-4 border border-zinc-400 shadow-md active:border-b-0 active:translate-y-1 active:shadow-none duration-100 transition-all'
+                >privacy policy</a
+            >
             <DotIcon />
-            <a href='https://github.com/diodzi/human-search' target='_blank'
+            <a
+                href='https://github.com/diodzi/human-search'
+                target='_blank'
+                class='text-sm gap-x-2 px-2 py-1 bg-linear-to-b from-zinc-50 to-zinc-200 text-zinc-800 rounded-lg cursor-default border-b-4 border border-zinc-400 shadow-md active:border-b-0 active:translate-y-1 active:shadow-none duration-100 transition-all'
                 >source code</a
             >
             <DotIcon />
-            <a href='https://diodzi.dev' target='_blank'
+            <a
+                href='https://diodzi.dev'
+                target='_blank'
+                class='text-sm gap-x-2 px-2 py-1 bg-linear-to-b from-zinc-50 to-zinc-200 text-zinc-800 rounded-lg cursor-default border-b-4 border border-zinc-400 shadow-md active:border-b-0 active:translate-y-1 active:shadow-none duration-100 transition-all'
                 >made with &lt;3 by fellow human diodzi</a
             >
         </footer>
