@@ -1,0 +1,49 @@
+---
+import { Font } from 'astro:assets'
+import { DotIcon } from '@lucide/astro'
+import '../styles/global.css'
+---
+
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <link
+            rel='icon'
+            href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>'
+        />
+        <meta name='viewport' content='width=device-width' />
+        <meta name='generator' content={Astro.generator} />
+        <title>HumanSearch</title>
+        <Font cssVariable='--font-lora' />
+        <link
+            rel='search'
+            type='application/opensearchdescription+xml'
+            title='HumanSearch'
+            href='/opensearch.xml'
+        />
+    </head>
+    <body class='h-screen w-full grid place-items-center'>
+        <main class='w-fit flex flex-col gap-y-9'>
+            <slot />
+        </main>
+        <footer
+            class='absolute bottom-0 py-4 w-full flex justify-center gap-x-4 text-zinc-400'
+        >
+            <a href='/privacy-policy'>privacy policy</a>
+            <DotIcon />
+            <a href='https://github.com/diodzi/human-search' target='_blank'
+                >source code</a
+            >
+            <DotIcon />
+            <a href='https://diodzi.dev' target='_blank'
+                >made with &lt;3 by fellow human diodzi</a
+            >
+        </footer>
+    </body>
+</html>
+
+<style>
+    html {
+        font-family: 'Helvetica';
+    }
+</style>

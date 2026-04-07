@@ -1,10 +1,10 @@
 ---
-const { ...props } = Astro.props;
+const { ...props } = Astro.props
 ---
 
 <div
     {...props}
-    class="w-fit flex items-center gap-x-2 bg-zinc-200 py-2 px-3 rounded-xl hover:cursor-pointer hover:bg-zinc-300 transition-colors duration-200 text-sm border border-zinc-300"
+    class='w-fit flex items-center gap-x-2 bg-zinc-200 py-2 px-3 rounded-xl hover:cursor-pointer hover:bg-zinc-400 transition-colors duration-200 text-sm border border-zinc-300'
 >
     <slot />
 </div>
