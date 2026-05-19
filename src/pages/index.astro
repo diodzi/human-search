@@ -4,8 +4,9 @@ import PlusIcon from '@lucide/astro/icons/plus'
 import MicIcon from '@lucide/astro/icons/mic'
 import SparklesIcon from '@lucide/astro/icons/sparkles'
 import CopyIcon from '@lucide/astro/icons/copy'
-import BrowserButton from '../components/browser-button.astro'
+import TactileButton from '../components/tactile-button.astro'
 import Input from '../components/input.astro'
+import { Check } from '@lucide/astro'
 ---
 
 <Layout>
@@ -52,7 +53,7 @@ import Input from '../components/input.astro'
         <div class='flex flex-col gap-y-2'>
             1. Select your browser:
             <div class='flex gap-x-4 pl-4.5'>
-                <BrowserButton data-browser='chrome'>
+                <TactileButton big={true} data-browser='chrome'>
                     <svg
                         role='img'
                         viewBox='0 0 24 24'
@@ -64,9 +65,9 @@ import Input from '../components/input.astro'
                         ></path></svg
                     >
                     <span>Google Chrome</span>
-                </BrowserButton>
+                </TactileButton>
 
-                <BrowserButton data-browser='safari'>
+                <TactileButton big={true} data-browser='safari'>
                     <svg
                         role='img'
                         viewBox='0 0 24 24'
@@ -78,7 +79,7 @@ import Input from '../components/input.astro'
                         ></path></svg
                     >
                     <span>Apple Safari (MacOS)</span>
-                </BrowserButton>
+                </TactileButton>
             </div>
         </div>
 
@@ -92,17 +93,17 @@ import Input from '../components/input.astro'
                         >chrome://settings/searchEngines</span
                     ></span
                 >
-                <button
-                    type='button'
+                <TactileButton
                     id='copy-chrome-before'
-                    class='w-32 flex items-center text-sm gap-x-2 px-2 py-1 bg-linear-to-b from-zinc-950 to-zinc-700 text-white rounded-lg cursor-default border-b-4 border-black shadow-lg active:border-b-0 active:translate-y-1 active:shadow-none duration-100 transition-all'
-                    ><CopyIcon size={15} /> Copy this link</button
+                    small={true}
+                    className='w-31'
+                    ><CopyIcon size={15} /> Copy this link</TactileButton
                 >
-                <button
-                    type='button'
+                <TactileButton
                     id='copy-chrome-after'
-                    class='w-32 hidden-manual flex items-center text-sm gap-x-2 px-2 py-1 bg-linear-to-b from-zinc-950 to-zinc-700 text-white rounded-lg cursor-default border-black border-b-0 translate-y-1 shadow-none duration-100 transition-all'
-                    ><CopyIcon size={15} /> Copied!</button
+                    small={true}
+                    className='w-31 hidden-manual active'
+                    ><Check size={15} /> Copied !</TactileButton
                 >
             </div>
             <div class='flex flex-col gap-y-4'>
@@ -218,6 +219,8 @@ import Input from '../components/input.astro'
         document
             .getElementById('copy-chrome-after')
             ?.classList.remove('hidden-manual')
+
+        document.getElementById('copy-chrome-after')
 
         const timeout = setTimeout(() => {
             document
