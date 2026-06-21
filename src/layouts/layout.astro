@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css'
 import { Font } from 'astro:assets'
-import { DotIcon } from '@lucide/astro'
+import { Cog, DotIcon } from '@lucide/astro'
 import TactileButton from '../components/tactile-button.astro'
 
 const pathname = new URL(Astro.url).pathname
@@ -27,7 +27,12 @@ const onPrivacyPolicy = pathname === '/privacy-policy'
         />
     </head>
     <body class='h-screen w-full grid place-items-center'>
-        <main class='w-fit flex flex-col gap-y-9'>
+        <a href='/settings' class='fixed top-4 right-4'>
+            <TactileButton big={true}>
+                <Cog stroke-width={1.5} /> Settings
+            </TactileButton>
+        </a>
+        <main class='w-fit flex flex-col gap-y-9 max-w-[85ch]'>
             <slot />
         </main>
 

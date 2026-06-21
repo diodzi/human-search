@@ -1,9 +1,18 @@
-import { resolveBang } from './utils/redirector'
+import { resolveBang, setSWOverrides } from './utils/redirector'
 
 declare const self: ServiceWorkerGlobalScope
 
 import { precacheAndRoute } from 'workbox-precaching'
 precacheAndRoute(self.__WB_MANIFEST)
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'settings-update') {
+    setSWOverrides({
+      fallback: event.data.fallback,
+      customBangs: event.data.customBangs,
+    })
+  }
+})
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)

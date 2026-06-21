@@ -1,25 +1,43 @@
-import { getSettings } from './settings'
+import { getSettings, type UserSettings } from './settings'
 
-type BangMap = Record<string, string>
+export type BangMap = Record<string, string>
 
-const SYSTEM_BANGS: BangMap = {
-  '?': 'https://www.google.com/search?q=reddit%20',
+export const SYSTEM_BANGS: BangMap = {
   '?g': 'https://www.genius.com/search?q=',
-  '!google': 'https://www.google.com/search?q=',
+  '?w': 'https://en.wikipedia.org/w/index.php?title=Special:Search&search=',
 }
 
-const FALLBACK_URLS = {
+export const FALLBACK_URLS = {
   google: 'https://www.google.com/search?q=',
   duckduckgo: 'https://www.duckduckgo.com/?q=',
 }
 
-export function resolveBang(inputUrl: string): string | null {
-  let settings
+let _swOverrides: Partial<UserSettings> | null = null
+
+export function setSWOverrides(overrides: Partial<UserSettings>) {
+  _swOverrides = overrides
+}
+
+function loadSettings() {
   try {
-    settings = getSettings() || { fallback: 'google', customBangs: {} }
+    const settings = getSettings() || { fallback: 'google', customBangs: {} }
+    if (_swOverrides) {
+      if (_swOverrides.fallback !== undefined)
+        settings.fallback = _swOverrides.fallback
+      if (_swOverrides.customBangs !== undefined)
+        settings.customBangs = _swOverrides.customBangs
+    }
+    return settings
   } catch (e) {
-    settings = { fallback: 'google', customBangs: {} }
+    return {
+      fallback: _swOverrides?.fallback || 'google',
+      customBangs: _swOverrides?.customBangs || {},
+    }
   }
+}
+
+export function resolveBang(inputUrl: string): string | null {
+  const settings = loadSettings()
   const ALL_BANGS = { ...SYSTEM_BANGS, ...settings.customBangs }
 
   const url = new URL(inputUrl)
@@ -46,14 +64,22 @@ export function resolveBang(inputUrl: string): string | null {
 
   if (match) {
     const trigger = (match[2] || match[4]).toLowerCase()
-    const baseUrl = ALL_BANGS[trigger]
 
-    const searchTerm = query
+    let searchTerm = query
       .replace(
         new RegExp(trigger.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
         '',
       )
       .trim()
+
+    if (trigger === '?') {
+      const baseUrl =
+        FALLBACK_URLS[settings.fallback as keyof typeof FALLBACK_URLS] ||
+        FALLBACK_URLS.google
+      return baseUrl + encodeURIComponent('reddit ' + searchTerm)
+    }
+
+    const baseUrl = ALL_BANGS[trigger]
 
     if (!searchTerm) return new URL(baseUrl).origin
 
