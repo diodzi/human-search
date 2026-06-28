@@ -1,11 +1,13 @@
 export interface UserSettings {
   fallback: string
   customBangs: Record<string, string>
+  disableAiSummary: boolean
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
   fallback: 'google',
   customBangs: {},
+  disableAiSummary: false,
 }
 
 export function getSettings(): UserSettings {

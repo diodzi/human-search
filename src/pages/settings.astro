@@ -14,7 +14,7 @@ import { Trash2Icon } from '@lucide/astro'
         >
         <h1 class='w-fit font-lora text-4xl'>Settings</h1>
 
-        <div class='space-y-4'>
+        <div class='space-y-4 pb-8 border-b border-zinc-300'>
             <h2 class='font-lora text-2xl'>Default Search Engine</h2>
             <div class='flex items-center gap-x-8'>
                 <TactileButton big data-engine='google'
@@ -37,6 +37,14 @@ import { Trash2Icon } from '@lucide/astro'
                             fill='#FFF'></path></svg
                     >DuckDuckGo</TactileButton
                 >
+            </div>
+        </div>
+
+        <div class='space-y-4 pb-8 border-b border-zinc-300'>
+            <h2 class='font-lora text-2xl'>Disable AI Summary</h2>
+            <div class='flex items-center gap-x-8'>
+                <TactileButton big data-ai-summary='yes'>Yes</TactileButton>
+                <TactileButton big data-ai-summary='no'>No</TactileButton>
             </div>
         </div>
 
@@ -67,7 +75,7 @@ import { Trash2Icon } from '@lucide/astro'
             </div>
 
             <div
-                class='overflow-x-auto bg-linear-to-b from-zinc-50 to-zinc-200 via-60% via-zinc-50 border border-zinc-200 rounded-lg shadow-sm'
+                class='overflow-x-auto overflow-y-auto max-h-[20vh] bg-linear-to-b from-zinc-50 to-zinc-200 via-60% via-zinc-50 border border-zinc-200 rounded-lg shadow-sm'
             >
                 <table class='w-full text-sm'>
                     <tbody id='bangs-body' class='divide-y divide-zinc-200'
@@ -85,11 +93,26 @@ import { Trash2Icon } from '@lucide/astro'
     import { getSettings, saveSettings } from '../utils/settings'
     import { SYSTEM_BANGS, FALLBACK_URLS } from '../utils/redirector'
 
-    function syncToSW(fallback: string, customBangs: Record<string, string>) {
+    function syncToSW(
+        fallback: string,
+        customBangs: Record<string, string>,
+        disableAiSummary: boolean,
+    ) {
         navigator.serviceWorker.controller?.postMessage({
             type: 'settings-update',
             fallback,
             customBangs,
+            disableAiSummary,
+        })
+    }
+
+    function setAiSummary(value: string) {
+        document.querySelectorAll('[data-ai-summary]').forEach((el) => {
+            const btn = el as HTMLElement
+            const on = btn.dataset.aiSummary === value
+            btn.classList.toggle('translate-y-1', on)
+            btn.classList.toggle('shadow-none', on)
+            btn.style.borderBottomWidth = on ? '0' : ''
         })
     }
 
@@ -142,7 +165,11 @@ import { Trash2Icon } from '@lucide/astro'
                 const settings = getSettings()
                 delete settings.customBangs[bang]
                 saveSettings(settings)
-                syncToSW(settings.fallback, settings.customBangs)
+                syncToSW(
+                    settings.fallback,
+                    settings.customBangs,
+                    settings.disableAiSummary,
+                )
                 renderBangs()
             })
         })
@@ -151,7 +178,12 @@ import { Trash2Icon } from '@lucide/astro'
     document.addEventListener('DOMContentLoaded', () => {
         const settings = getSettings()
         setActive(settings.fallback)
-        syncToSW(settings.fallback, settings.customBangs)
+        setAiSummary(settings.disableAiSummary ? 'yes' : 'no')
+        syncToSW(
+            settings.fallback,
+            settings.customBangs,
+            settings.disableAiSummary,
+        )
         renderBangs()
 
         document.querySelectorAll('[data-engine]').forEach((el) => {
@@ -161,7 +193,26 @@ import { Trash2Icon } from '@lucide/astro'
                 settings.fallback = engine
                 saveSettings(settings)
                 setActive(engine)
-                syncToSW(engine, settings.customBangs)
+                syncToSW(
+                    engine,
+                    settings.customBangs,
+                    settings.disableAiSummary,
+                )
+            })
+        })
+
+        document.querySelectorAll('[data-ai-summary]').forEach((el) => {
+            el.addEventListener('click', () => {
+                const value = (el as HTMLElement).dataset.aiSummary!
+                const settings = getSettings()
+                settings.disableAiSummary = value === 'yes'
+                saveSettings(settings)
+                setAiSummary(value)
+                syncToSW(
+                    settings.fallback,
+                    settings.customBangs,
+                    settings.disableAiSummary,
+                )
             })
         })
 
@@ -196,7 +247,11 @@ import { Trash2Icon } from '@lucide/astro'
 
                 settings.customBangs[bang] = url
                 saveSettings(settings)
-                syncToSW(settings.fallback, settings.customBangs)
+                syncToSW(
+                    settings.fallback,
+                    settings.customBangs,
+                    settings.disableAiSummary,
+                )
                 bangInput.value = ''
                 urlInput.value = ''
                 renderBangs()

@@ -5,6 +5,7 @@ export type BangMap = Record<string, string>
 export const SYSTEM_BANGS: BangMap = {
   '?g': 'https://www.genius.com/search?q=',
   '?w': 'https://en.wikipedia.org/w/index.php?title=Special:Search&search=',
+  '?': '',
 }
 
 export const FALLBACK_URLS = {
@@ -20,18 +21,21 @@ export function setSWOverrides(overrides: Partial<UserSettings>) {
 
 function loadSettings() {
   try {
-    const settings = getSettings() || { fallback: 'google', customBangs: {} }
+    const settings = getSettings() || { fallback: 'google', customBangs: {}, disableAiSummary: false }
     if (_swOverrides) {
       if (_swOverrides.fallback !== undefined)
         settings.fallback = _swOverrides.fallback
       if (_swOverrides.customBangs !== undefined)
         settings.customBangs = _swOverrides.customBangs
+      if (_swOverrides.disableAiSummary !== undefined)
+        settings.disableAiSummary = _swOverrides.disableAiSummary
     }
     return settings
   } catch (e) {
     return {
       fallback: _swOverrides?.fallback || 'google',
       customBangs: _swOverrides?.customBangs || {},
+      disableAiSummary: _swOverrides?.disableAiSummary || false,
     }
   }
 }
@@ -76,7 +80,10 @@ export function resolveBang(inputUrl: string): string | null {
       const baseUrl =
         FALLBACK_URLS[settings.fallback as keyof typeof FALLBACK_URLS] ||
         FALLBACK_URLS.google
-      return baseUrl + encodeURIComponent('reddit ' + searchTerm)
+      const term = settings.disableAiSummary
+        ? 'reddit ' + searchTerm + ' -ai'
+        : 'reddit ' + searchTerm
+      return baseUrl + encodeURIComponent(term)
     }
 
     const baseUrl = ALL_BANGS[trigger]
@@ -90,5 +97,6 @@ export function resolveBang(inputUrl: string): string | null {
     FALLBACK_URLS[settings.fallback as keyof typeof FALLBACK_URLS] ||
     FALLBACK_URLS.google
 
-  return fallbackBase + encodeURIComponent(query)
+  const finalQuery = settings.disableAiSummary ? query + ' -ai' : query
+  return fallbackBase + encodeURIComponent(finalQuery)
 }

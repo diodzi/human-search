@@ -10,6 +10,7 @@ self.addEventListener('message', (event) => {
     setSWOverrides({
       fallback: event.data.fallback,
       customBangs: event.data.customBangs,
+      disableAiSummary: event.data.disableAiSummary,
     })
   }
 })
