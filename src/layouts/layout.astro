@@ -6,6 +6,7 @@ import TactileButton from '../components/tactile-button.astro'
 
 const pathname = new URL(Astro.url).pathname
 const onPrivacyPolicy = pathname === '/privacy-policy'
+const onSettings = pathname === '/settings'
 ---
 
 <html lang='en'>
@@ -32,12 +33,33 @@ const onPrivacyPolicy = pathname === '/privacy-policy'
                 <Cog stroke-width={1.5} /> Settings
             </TactileButton>
         </a>
-        <main class='w-fit flex flex-col gap-y-9 max-w-[85ch]'>
+        <main class='hidden w-fit md:flex flex-col gap-y-9 max-w-[85ch]'>
             <slot />
         </main>
 
+        {
+            !onSettings && !onPrivacyPolicy ? (
+                <main class='p-8 flex flex-col md:hidden gap-y-4'>
+                    <h1 class='text-4xl font-medium'>
+                        <span class='font-lora italic'>Human</span>Search
+                    </h1>
+
+                    <p class='text-sm'>
+                        <b>WARNING:</b> HumanSearch was not built with mobile in
+                        mind. With that being said, it can still work if you
+                        know what you're doing. For full instructions, please
+                        open on a desktop browser.
+                    </p>
+                </main>
+            ) : (
+                <main class='p-8 w-fit flex flex-col gap-y-9 max-w-[85ch]'>
+                    <slot />
+                </main>
+            )
+        }
+
         <footer
-            class='absolute bottom-0 pb-6 w-full flex justify-center items-center gap-x-4 text-zinc-400'
+            class='absolute bottom-0 pb-6 w-full flex flex-row justify-center items-center gap-x-2 md:gap-x-4 text-zinc-400'
         >
             <a href='/privacy-policy'>
                 <TactileButton light={true}>privacy policy</TactileButton>
@@ -46,8 +68,13 @@ const onPrivacyPolicy = pathname === '/privacy-policy'
             <a href='https://github.com/diodzi/human-search' target='_blank'>
                 <TactileButton light={true}>source code</TactileButton>
             </a>
-            <DotIcon />
-            <a href='https://diodzi.dev' target='_blank'>
+
+            <DotIcon class='hidden md:block' />
+            <a
+                class='hidden md:block'
+                href='https://diodzi.dev'
+                target='_blank'
+            >
                 <TactileButton light={true}>
                     made with &lt;3 by fellow human diodzi
                 </TactileButton>
